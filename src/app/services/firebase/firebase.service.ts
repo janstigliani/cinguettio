@@ -1,12 +1,15 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { collection, Firestore, getDocs, getFirestore, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, Firestore, getDocs, getFirestore, onSnapshot, setDoc, Timestamp } from "firebase/firestore";
 import { Cinguettio } from '../../model/cinguettio';
+import { LocationService } from '../location/location.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
+
+  locationServ = inject(LocationService);
 
   firebaseConfig = {
     apiKey: "AIzaSyA7ymoFr6ZVE0AEy-SNkrpLws95vcMq-cc",
@@ -65,10 +68,29 @@ export class FirebaseService {
       });
 
       this.cinguettii.update((_) => newArray);
-      
+
     })
 
+  }
 
+  async publish(cinguettioText: string) {
 
+    const location = this.locationServ.getLocation().then(location => {
+      const newCinguettio: Cinguettio = {
+        text: cinguettioText,
+        creationTime: Timestamp.now(),
+        location: {
+          lat: location.coords.latitude,
+          lng: location.coords.longitude
+        }
+      }
+      addDoc(collection(this.db, "cinguettii"), newCinguettio);
+    }).catch((error) => {
+      const newCinguettio: Cinguettio = {
+        text: cinguettioText,
+        creationTime: Timestamp.now(),
+      }
+      addDoc(collection(this.db, "cinguettii"), newCinguettio);
+    });
   }
 }

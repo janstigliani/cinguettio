@@ -1,0 +1,16 @@
+.list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.card{
+    width: 600px;
+    border: solid 1px black;
+    padding: 12px;
+    box-sizing: border-box;
+    word-break: break-all;
+    overflow: auto;
+}

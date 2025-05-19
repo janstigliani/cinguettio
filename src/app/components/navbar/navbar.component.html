@@ -1,5 +1,11 @@
 <div class="navbar">
     <a [routerLink]="['list']">CINGUETTIO</a>
     <span class="divider"></span>
-    <a [routerLink]="['login']">login</a>
+    @if (!authServ.isAuth()) {
+          <a [routerLink]="['login']">login</a>
+    }
+    @else {
+        <button (click)="logOut()">LogOut</button>
+    }
+    
 </div>

@@ -1,8 +1,12 @@
-<div>
+@if (authServ.isAuth()) {
+  <app-form-cinguettio></app-form-cinguettio>
+}
+
+<div class="list">
   @for (cinguettio of firebaseServ.cinguettii(); track $index) {
-    <div>
-      <span>{{cinguettio.text}}</span>
-      <span>{{cinguettio.creationTime.toDate()}}</span>
+    <div class="card">
+      <p>{{cinguettio.text}}</p>
+      <p>{{cinguettio.creationTime.toDate()}}</p>
     </div>
   }
 </div>
