@@ -93,4 +93,13 @@ export class FirebaseService {
       addDoc(collection(this.db, "cinguettii"), newCinguettio);
     });
   }
+
+   saveUser(uid:string, nick:string){
+    const user = {
+          nick: nick,
+        }
+        const path = doc(this.db, 'users', uid);
+        setDoc(path, user);
+        
+  }
 }

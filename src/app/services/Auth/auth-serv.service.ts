@@ -1,11 +1,13 @@
-import { Injectable, signal } from '@angular/core';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { inject, Injectable, signal } from '@angular/core';
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServService {
 
+  firebaseServ = inject(FirebaseService)
   isAuth = signal(false);
 
   constructor() {
@@ -55,6 +57,20 @@ export class AuthServService {
   }
 
   firebaseRegister(nickname:string ,email: string, password: string) {
-    throw new Error('Method not implemented.');
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        console.log(user);
+
+        this.firebaseServ.saveUser(user.uid, nickname);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
   }
 }
