@@ -14,3 +14,13 @@ export const authGuard: CanActivateFn = (route, state) => {
     return router.createUrlTree(['/login'])
   }
 };
+
+export const authGuardLogged: CanActivateFn = (route, state) => {
+  const authServ = inject(AuthServService);
+  const router = inject(Router)
+  if (!authServ.isAuth()){
+    return true;
+  } else { 
+    return router.createUrlTree(['/list'])
+  }
+};
